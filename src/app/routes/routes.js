@@ -4,19 +4,27 @@ import { Navigate } from 'react-router-dom'
 import MyDriveRoutes from 'app/pages/my-drive/MyDriveRoutes';
 import AuthRoutes from 'app/pages/auth/AuthRoutes';
 import NotFound from 'app/pages/auth/NotFound';
+import AuthGuard from 'app/auth/AuthGuard';
 
 export const AllPages = () => {
     const all_routes = [
         {
             element: (
-                <Layout />
+                <AuthGuard>
+                    <Layout />
+                </AuthGuard>
             ),
             children: [...MyDriveRoutes ],
         },
         ...AuthRoutes,
         {
             path: '/',
-            element: <Navigate to="/my-drive" />,
+            element: (
+                <AuthGuard>
+                    <Navigate to="/my-drive" />
+
+                </AuthGuard>
+            ),
         },
         {
             path: '*',

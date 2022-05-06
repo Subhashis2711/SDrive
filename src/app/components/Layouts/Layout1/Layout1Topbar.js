@@ -1,6 +1,6 @@
 import React from 'react'
 // import { Link } from 'react-router-dom'
-// import useAuth from 'app/hooks/useAuth'
+import useAuth from '../../../hooks/useAuth'
 import useSettings from 'app/hooks/useSettings'
 import { styled, useTheme, Box } from '@mui/system'
 import { Span } from '../../../components/Typography'
@@ -79,8 +79,10 @@ const StyledItem = styled(MenuItem)(({ theme }) => ({
 const Layout1Topbar = () => {
     const theme = useTheme()
     const { settings, updateSettings } = useSettings()
-    // const { logout, user } = useAuth()
+    const { logout, user } = useAuth()
     const isLgScreen = useMediaQuery(theme.breakpoints.down('lg'))
+
+    const user_name = (user)? user.name : '';
 
     const updateSidebarMode = (sidebarSettings) => {
         updateSettings({
@@ -125,7 +127,7 @@ const Layout1Topbar = () => {
                             <UserMenu>
                                 <Hidden xsDown>
                                     <Span>
-                                        Hi <strong>Subhashis Das</strong>
+                                        Hi <strong>{user_name}</strong>
                                     </Span>
                                 </Hidden>
                                 <Avatar
@@ -135,7 +137,7 @@ const Layout1Topbar = () => {
                             </UserMenu>
                         }
                     >
-                        <StyledItem>
+                        <StyledItem onClick={logout}>
                             <LogoutIcon />
                             <Span> Logout </Span>
                         </StyledItem>

@@ -4,7 +4,7 @@ import React from 'react'
 import { AllPages } from './routes/routes'
 import Theme from './components/Theme/Theme'
 import { useRoutes } from 'react-router-dom'
-// import { AuthProvider } from 'app/contexts/JWTAuthContext'
+import { AuthProvider } from '../app/context/JWTAuthContext'
 import { SettingsProvider } from '../app/context/SettingsContext'
 
 const App = () => {
@@ -14,7 +14,7 @@ const App = () => {
         // <Provider store={Store}>
             <SettingsProvider>
                 <Theme>
-                    {all_pages}
+                    <AuthProvider>{all_pages}</AuthProvider>                
                 </Theme>
             </SettingsProvider>
         // </Provider>

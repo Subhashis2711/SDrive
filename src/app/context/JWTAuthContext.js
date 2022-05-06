@@ -9,22 +9,23 @@ const initialState = {
     user: null,
 }
 
-const isValidToken = (accessToken) => {
-    if (!accessToken) {
+const isValidToken = (access) => {
+    if (!access) {
         return false
     }
 
-    const decodedToken = jwtDecode(accessToken)
+    const decodedToken = jwtDecode(access)
     const currentTime = Date.now() / 1000
     return decodedToken.exp > currentTime
 }
 
-const setSession = (accessToken) => {
-    if (accessToken) {
-        localStorage.setItem('accessToken', accessToken)
-        axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`
+const setSession = (access, refresh) => {
+    if(access && refresh) {
+        localStorage.setItem('access', access)
+        localStorage.setItem('refresh', refresh)
+        axios.defaults.headers.common.Authorization = `Bearer ${access}`
     } else {
-        localStorage.removeItem('accessToken')
+        localStorage.removeItem('access')
         delete axios.defaults.headers.common.Authorization
     }
 }
@@ -84,13 +85,14 @@ export const AuthProvider = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initialState)
 
     const login = async (email, password) => {
-        const response = await axios.post('/api/auth/login', {
+        const response = await axios.post('/gateway/login', {
             email,
             password,
         })
-        const { accessToken, user } = response.data
 
-        setSession(accessToken)
+        const { access, refresh, user } = response.data
+
+        setSession(access, refresh)
 
         dispatch({
             type: 'LOGIN',
@@ -127,11 +129,12 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         ; (async () => {
             try {
-                const accessToken = window.localStorage.getItem('accessToken')
+                const accessToken = window.localStorage.getItem('access')
+                const refreshToken = window.localStorage.getItem('refresh')
 
                 if (accessToken && isValidToken(accessToken)) {
-                    setSession(accessToken)
-                    const response = await axios.get('/api/auth/profile')
+                    setSession(accessToken, refreshToken)
+                    const response = await axios.get('/gateway/profile')
                     const { user } = response.data
 
                     dispatch({

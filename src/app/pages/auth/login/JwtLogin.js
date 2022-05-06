@@ -172,9 +172,7 @@ const JwtLogin = () => {
                                     <Span sx={{ mr: 1, ml: '20px' }}>or</Span>
                                     <Button
                                         sx={{ textTransform: 'capitalize' }}
-                                        onClick={() =>
-                                            navigate('/auth/signup')
-                                        }
+                                        onClick={() => navigate('/auth/signup')}
                                     >
                                         Sign up
                                     </Button>
