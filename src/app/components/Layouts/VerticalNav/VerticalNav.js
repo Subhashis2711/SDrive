@@ -1,11 +1,12 @@
 import { styled, Box } from '@mui/system'
-import React, { Fragment } from 'react'
+import React, { Fragment, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import useSettings from 'app/hooks/useSettings'
 import { Span } from '../../Typography'
 import { ButtonBase } from '@mui/material'
 
 import CustomButton from 'app/components/UI/Button/CustomButton'
+import CustomizedMenu from 'app/components/UI/Menu/CustomizedMenu'
 
 const ExtAndIntCommon = {
     display: 'flex',
@@ -66,28 +67,52 @@ const BadgeValue = styled('div')(() => ({
 const VerticalNav = ({ items }) => {
     const { settings } = useSettings()
     const { mode } = settings.layout1Settings.leftSidebar
+    const [anchorEl, setAnchorEl] = useState(null);
+
 
     const renderLevels = (data) => {
         return data.map((item, index) => {
+            console.log(item);
             if (item.type === 'button') {
+                const open = Boolean(anchorEl);
+
+                const handleClick = (event) => {
+                    setAnchorEl(event.currentTarget)
+                }
+            
+                const handleClose = () => {
+                    setAnchorEl(null)
+                }
+
                 return (
-                    <CustomButton
-                        type={item.btn_type}
-                        variant={item.variant}
-                        shape={item.shape}
-                        color={item.color}
-                        icon={item.icon}
-                        icon_sx={item.icon_sx}
-                        sx={{
-                            width: '100%',
-                            fontSize: 25,
-                            margin: '20px auto',
-                        }}
-                    >
-                        <StyledText mode={mode} className="sidenavHoverShow">
-                            {item.label}
-                        </StyledText>
-                    </CustomButton>
+                    <Box key={index} container textAlign="center">
+                        <CustomButton
+                            type={item.btn_type}
+                            variant={item.variant}
+                            shape={item.shape}
+                            color={item.color}
+                            icon={item.icon}
+                            icon_sx={item.icon_sx}
+                            sx={{
+                                width: '100%',
+                                fontSize: 25,
+                                margin: '20px auto',
+                            }}
+                            onClick={handleClick}
+                        >
+                            <StyledText mode={mode} className="sidenavHoverShow">
+                                {item.label}
+                            </StyledText>
+                        </CustomButton>
+                        {item.menu_items && (
+                            <CustomizedMenu
+                                items={item.menu_items}
+                                handleClose={handleClose}
+                                open={open}
+                                anchorEl={anchorEl}
+                            />
+                        )}
+                    </Box>
                 )
             } else {
                 const Icon = item?.icon ? item.icon : ''

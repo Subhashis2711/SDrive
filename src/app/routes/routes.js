@@ -11,7 +11,8 @@ export const AllPages = () => {
         {
             element: (
                 <AuthGuard>
-                    <Layout />
+                        <Layout />
+
                 </AuthGuard>
             ),
             children: [...MyDriveRoutes ],

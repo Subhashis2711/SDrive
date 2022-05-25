@@ -46,7 +46,7 @@ const NavListBox = styled(Box)(() => ({
     flexDirection: 'column',
 }))
 
-const Layout1Sidenav = () => {
+const Layout1Sidenav = (props) => {
     const theme = useTheme()
     const { settings } = useSettings()
     const leftSidebar = settings.layout1Settings.leftSidebar

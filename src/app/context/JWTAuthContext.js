@@ -19,13 +19,15 @@ const isValidToken = (access) => {
     return decodedToken.exp > currentTime
 }
 
-const setSession = (access, refresh) => {
+const setSession = async (access, refresh) => {
     if(access && refresh) {
         localStorage.setItem('access', access)
         localStorage.setItem('refresh', refresh)
         axios.defaults.headers.common.Authorization = `Bearer ${access}`
     } else {
         localStorage.removeItem('access')
+        localStorage.removeItem('refresh')
+
         delete axios.defaults.headers.common.Authorization
     }
 }
@@ -92,7 +94,7 @@ export const AuthProvider = ({ children }) => {
 
         const { access, refresh, user } = response.data
 
-        setSession(access, refresh)
+        await setSession(access, refresh)
 
         dispatch({
             type: 'LOGIN',
@@ -145,6 +147,7 @@ export const AuthProvider = ({ children }) => {
                         },
                     })
                 } else {
+                    console.log("hi");
                     dispatch({
                         type: 'INIT',
                         payload: {
@@ -154,7 +157,6 @@ export const AuthProvider = ({ children }) => {
                     })
                 }
             } catch (err) {
-                console.error(err)
                 dispatch({
                     type: 'INIT',
                     payload: {

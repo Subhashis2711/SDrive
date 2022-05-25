@@ -5,12 +5,15 @@ import Layout1Sidenav from './Layout1Sidenav'
 import Scrollbar from 'react-perfect-scrollbar'
 import useSettings from 'app/hooks/useSettings'
 import { styled, Box, useTheme } from '@mui/system'
-import React, { useEffect, useRef } from 'react'
+import React, { Fragment, useEffect, useRef } from 'react'
 import { ThemeProvider, useMediaQuery } from '@mui/material'
 import SidenavTheme from '../../Theme/SidenavTheme/SidenavTheme'
 import SecondarySidebar from '../../Theme/SecondarySidenavTheme/SecondarySidenavTheme'
 import { sidenavCompactWidth, sideNavWidth } from 'app/utils/constant'
 import { Outlet } from 'react-router-dom'
+import useUiComponent from 'app/hooks/useUiComponent'
+import CustomizedAlertBar from 'app/components/UI/AlertBars/CustomizedAlertBar'
+import { useSelector } from 'react-redux'
 
 const Layout1Root = styled(Box)(({ theme }) => ({
     display: 'flex',
@@ -50,6 +53,14 @@ const LayoutContainer = styled(Box)(({ width, secondarySidebar }) => ({
 const Layout1 = () => {
     const { settings, updateSettings } = useSettings()
     const { layout1Settings, secondarySidebar } = settings
+    const { component: Component, hideUiComponent } = useUiComponent({
+        name: 'Dialog',
+    })
+    const open = Component ? true : false;
+
+    const ui = useSelector((state) => state.ui);
+    const alertBar = ui.toast;
+
     const topbarTheme = settings.themes[layout1Settings.topbar.theme]
     const {
         leftSidebar: { mode: sidenavMode, show: showSidenav },
@@ -80,68 +91,83 @@ const Layout1 = () => {
             let mode = isMdScreen ? 'close' : sidebarMode
             updateSettings({ layout1Settings: { leftSidebar: { mode } } })
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isMdScreen])
 
     return (
-        <Layout1Root className={layoutClasses}>
-            {showSidenav && sidenavMode !== 'close' && (
-                <SidenavTheme>
-                    <Layout1Sidenav />
-                </SidenavTheme>
-            )}
+        <Fragment>
+            {open && <Component open={open} handleClose={hideUiComponent} />}
 
-            <LayoutContainer
-                width={sidenavWidth}
-                secondarySidebar={secondarySidebar}
-            >
-                {layout1Settings.topbar.show && layout1Settings.topbar.fixed && (
-                    <ThemeProvider theme={topbarTheme}>
-                        <Layout1Topbar fixed={true} className="elevation-z8" />
-                    </ThemeProvider>
+            <Layout1Root className={layoutClasses}>
+                {showSidenav && sidenavMode !== 'close' && (
+                    <SidenavTheme>
+                        <Layout1Sidenav />
+                    </SidenavTheme>
                 )}
-                {settings.perfectScrollbar && (
-                    <StyledScrollBar>
-                        {layout1Settings.topbar.show &&
-                            !layout1Settings.topbar.fixed && (
-                                <ThemeProvider theme={topbarTheme}>
-                                    <Layout1Topbar />
-                                </ThemeProvider>
-                            )}
-                        <Box flexGrow={1} position="relative">
-                            <CustomSuspense>
-                                <Outlet />
-                            </CustomSuspense>
-                        </Box>
-                        {settings.footer.show && !settings.footer.fixed && (
-                            <Footer />
+
+                <LayoutContainer
+                    width={sidenavWidth}
+                    secondarySidebar={secondarySidebar}
+                >
+                    {layout1Settings.topbar.show &&
+                        layout1Settings.topbar.fixed && (
+                            <ThemeProvider theme={topbarTheme}>
+                                <Layout1Topbar
+                                    fixed={true}
+                                    className="elevation-z8"
+                                />
+                            </ThemeProvider>
                         )}
-                    </StyledScrollBar>
-                )}
-
-                {!settings.perfectScrollbar && (
-                    <ContentBox>
-                        {layout1Settings.topbar.show &&
-                            !layout1Settings.topbar.fixed && (
-                                <ThemeProvider theme={topbarTheme}>
-                                    <Layout1Topbar />
-                                </ThemeProvider>
+                    {settings.perfectScrollbar && (
+                        <StyledScrollBar>
+                            {layout1Settings.topbar.show &&
+                                !layout1Settings.topbar.fixed && (
+                                    <ThemeProvider theme={topbarTheme}>
+                                        <Layout1Topbar />
+                                    </ThemeProvider>
+                                )}
+                            <Box flexGrow={1} position="relative">
+                                <CustomSuspense>
+                                    <Outlet />
+                                </CustomSuspense>
+                            </Box>
+                            {settings.footer.show && !settings.footer.fixed && (
+                                <Footer />
                             )}
-                        <Box flexGrow={1} position="relative">
-                            <CustomSuspense>
-                                <Outlet />
-                            </CustomSuspense>
-                        </Box>
-                        {settings.footer.show && !settings.footer.fixed && (
-                            <Footer />
-                        )}
-                    </ContentBox>
-                )}
+                        </StyledScrollBar>
+                    )}
 
-                {settings.footer.show && settings.footer.fixed && <Footer />}
-            </LayoutContainer>
-            {settings.secondarySidebar.show && <SecondarySidebar />}
-        </Layout1Root>
+                    {!settings.perfectScrollbar && (
+                        <ContentBox>
+                            {layout1Settings.topbar.show &&
+                                !layout1Settings.topbar.fixed && (
+                                    <ThemeProvider theme={topbarTheme}>
+                                        <Layout1Topbar />
+                                    </ThemeProvider>
+                                )}
+                            <Box flexGrow={1} position="relative">
+                                <CustomSuspense>
+                                    <Outlet />
+                                </CustomSuspense>
+                            </Box>
+                            {settings.footer.show && !settings.footer.fixed && (
+                                <Footer />
+                            )}
+                        </ContentBox>
+                    )}
+
+                    {settings.footer.show && settings.footer.fixed && (
+                        <Footer />
+                    )}
+                </LayoutContainer>
+                {settings.secondarySidebar.show && <SecondarySidebar />}
+            </Layout1Root>
+
+            {alertBar.open && 
+                <CustomizedAlertBar
+                    {...alertBar.props}
+                />
+            }
+        </Fragment>
     )
 }
 

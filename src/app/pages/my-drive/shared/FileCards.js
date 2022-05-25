@@ -10,6 +10,8 @@ const CardRoot = styled(Card)(({ theme }) => ({
     [theme.breakpoints.down('sm')]: {
         paddingLeft: '16px !important',
     },
+    border: "0.1rem solid lightgray",
+
 }))
 
 const StyledCard = styled(Card)(({ theme }) => ({
@@ -26,6 +28,7 @@ const StyledCard = styled(Card)(({ theme }) => ({
     '& svg': {
         width: '50%'
     },
+
 }))
 
 const Heading = styled('h6')(({ theme }) => ({
@@ -36,7 +39,10 @@ const Heading = styled('h6')(({ theme }) => ({
     color: theme.palette.primary.main,
 }))
 
-const FileCards = () => {
+const FileCards = (props) => {
+    const { files } = props;
+    console.log(files);
+
     return (
         <Grid container spacing={3} sx={{ mb: '24px' }}>
             <Grid item xs={12} sm={6} md={4} lg={3}>

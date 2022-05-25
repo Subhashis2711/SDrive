@@ -6,13 +6,20 @@ import 'perfect-scrollbar/css/perfect-scrollbar.css'
 import * as serviceWorker from './serviceWorker'
 import { StyledEngineProvider } from '@mui/styled-engine'
 import { CssBaseline } from '@mui/material'
+import { Provider } from 'react-redux'
+import store from '../src/app/store'
+import configureUiStore from './app/hooks-store/ui/ui-store';
+
+configureUiStore();
 
 ReactDOM.render(
     <StyledEngineProvider injectFirst>
-        <BrowserRouter>
-            <CssBaseline />
-            <App />
-        </BrowserRouter>
+        <Provider store={store}>
+            <BrowserRouter>
+                <CssBaseline />
+                <App />
+            </BrowserRouter>
+        </Provider>
     </StyledEngineProvider>,
     document.getElementById('root')
 )

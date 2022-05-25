@@ -68,7 +68,7 @@ const Breadcrumb = ({ routeSegments }) => {
                 {routeSegments
                     ? routeSegments.map((route, index) => {
                         return index !== routeSegments.length - 1 ? (
-                            <NavLink key={index} to={route.path}>
+                            <NavLink key={index} to={`${route.path}`}>
                                 <SubName>
                                     {route.name}
                                 </SubName>

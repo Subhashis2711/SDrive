@@ -3,7 +3,7 @@ import { Fab } from '@mui/material'
 
 
 const CustomButton = (props) => {
-    const { type, icon, icon_sx, color, variant, shape, sx } = props
+    const { type, icon, icon_sx, color, variant, shape, sx, onClick } = props
     const Icon = icon
 
     return (
@@ -14,6 +14,7 @@ const CustomButton = (props) => {
                 aria-label="Delete"
                 className="button"
                 sx={sx}
+                onClick={onClick}
             >
                 <Icon sx={icon_sx}/>
                 {props.children}

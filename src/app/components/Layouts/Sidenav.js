@@ -4,6 +4,7 @@ import { navigations } from 'app/navigations'
 import VerticalNav from 'app/components/Layouts/VerticalNav/VerticalNav'
 import useSettings from 'app/hooks/useSettings'
 import { styled } from '@mui/system'
+import { checkPropTypes } from 'prop-types'
 
 const StyledScrollBar = styled(Scrollbar)(() => ({
     paddingLeft: '1rem',
@@ -25,8 +26,9 @@ const SideNavMobile = styled('div')(({ theme }) => ({
     },
 }))
 
-const Sidenav = ({ children }) => {
+const Sidenav = (props) => {
     const { settings, updateSettings } = useSettings()
+    const { onOpenCreateFolderDialog } = props
 
     const updateSidebarMode = (sidebarSettings) => {
         let activeLayoutSettingsName = settings.activeLayout + 'Settings'
@@ -47,8 +49,11 @@ const Sidenav = ({ children }) => {
     return (
         <Fragment>
             <StyledScrollBar options={{ suppressScrollX: true }}>
-                {children}
-                <VerticalNav items={navigations} />
+                {checkPropTypes.children}
+                <VerticalNav
+                    items={navigations}
+                    onOpenCreateFolderDialog={onOpenCreateFolderDialog}
+                />
             </StyledScrollBar>
 
             <SideNavMobile

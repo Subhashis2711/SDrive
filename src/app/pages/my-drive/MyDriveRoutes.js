@@ -14,6 +14,10 @@ const MyDriveRoutes = [
         element: <MyDrive />
     },
     {
+        path: '/my-drive/:slug',
+        element: <MyDrive />
+    },
+    {
         path: '/shared',
         element: <Shared />
     },
