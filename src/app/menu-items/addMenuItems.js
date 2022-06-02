@@ -40,11 +40,13 @@ const addMenuItems = [
                 id: 'upload-file',
                 title: 'File Upload',
                 icon: icons.UploadFileRoundedIcon,
+                upload: 'file-upload'
             },
             {
                 id: 'upload-folder',
                 title: 'Folder Upload',
                 icon: icons.DriveFolderUploadRoundedIcon,
+                upload: 'folder-upload'
             },
         ],
     },

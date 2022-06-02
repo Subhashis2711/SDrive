@@ -5,6 +5,7 @@ import { Toolbar, AppBar, ThemeProvider } from '@mui/material'
 import { styled, useTheme } from '@mui/system'
 import { topBarHeight } from 'app/utils/constant'
 
+
 const AppFooter = styled(Toolbar)(() => ({
     display: 'flex',
     alignItems: 'center',

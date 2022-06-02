@@ -72,7 +72,6 @@ const VerticalNav = ({ items }) => {
 
     const renderLevels = (data) => {
         return data.map((item, index) => {
-            console.log(item);
             if (item.type === 'button') {
                 const open = Boolean(anchorEl);
 

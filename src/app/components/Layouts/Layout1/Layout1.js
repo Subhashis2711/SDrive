@@ -14,6 +14,8 @@ import { Outlet } from 'react-router-dom'
 import useUiComponent from 'app/hooks/useUiComponent'
 import CustomizedAlertBar from 'app/components/UI/AlertBars/CustomizedAlertBar'
 import { useSelector } from 'react-redux'
+import FileUploadBar from 'app/components/UI/AlertBars/FileUploadBar'
+import { UploadFile } from '@mui/icons-material'
 
 const Layout1Root = styled(Box)(({ theme }) => ({
     display: 'flex',
@@ -56,10 +58,12 @@ const Layout1 = () => {
     const { component: Component, hideUiComponent } = useUiComponent({
         name: 'Dialog',
     })
-    const open = Component ? true : false;
+    const open = Component ? true : false
 
-    const ui = useSelector((state) => state.ui);
-    const alertBar = ui.toast;
+    const ui = useSelector((state) => state.ui)
+    const fileUpload = useSelector((state) => state.fileUpload)
+    console.log(fileUpload)
+    const alertBar = ui.toast
 
     const topbarTheme = settings.themes[layout1Settings.topbar.theme]
     const {
@@ -162,11 +166,14 @@ const Layout1 = () => {
                 {settings.secondarySidebar.show && <SecondarySidebar />}
             </Layout1Root>
 
-            {alertBar.open && 
-                <CustomizedAlertBar
-                    {...alertBar.props}
-                />
-            }
+            {alertBar.open && <CustomizedAlertBar {...alertBar.props} />}
+
+            {fileUpload.selectedFiles.length !== 0 &&
+                fileUpload.progressInfos.length !== 0 && (
+                    <FileUploadBar
+                        uploadProgressInfos={fileUpload.progressInfos}
+                    />
+                )}
         </Fragment>
     )
 }

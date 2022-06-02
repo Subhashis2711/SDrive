@@ -41,38 +41,29 @@ const Heading = styled('h6')(({ theme }) => ({
 
 const FileCards = (props) => {
     const { files } = props;
-    console.log(files);
 
     return (
         <Grid container spacing={3} sx={{ mb: '24px' }}>
-            <Grid item xs={12} sm={6} md={4} lg={3}>
-                <CardRoot>
-                    <StyledCard elevation={3}>
-                        <FileIcon extension="docx" {...defaultStyles.docx} sx={{width: '60%'}}/>
-                    </StyledCard>
-                    <Box
-                        display="flex"
-                        alignItems="center"
-                        justifyContent="center"
-                    >
-                        <Heading>Inspection#9765422</Heading>
-                    </Box>
-                </CardRoot>
-            </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3}>
-                <CardRoot>
-                    <StyledCard elevation={3}>
-                        <FileIcon extension="xlsx" {...defaultStyles.xlsx} />
-                    </StyledCard>
-                    <Box
-                        display="flex"
-                        alignItems="center"
-                        justifyContent="center"
-                    >
-                        <Heading>Inspection#9765422</Heading>
-                    </Box>
-                </CardRoot>
-            </Grid>
+            {files.map((item) => (
+                <Grid item xs={12} sm={6} md={4} lg={3}>
+                    <CardRoot>
+                        <StyledCard elevation={3}>
+                            <FileIcon extension={item.extension} {...defaultStyles[item.extension]} sx={{width: '60%'}}/>
+                        </StyledCard>
+                        <Box
+                            display="flex"
+                            alignItems="center"
+                            justifyContent="center"
+                        >
+                            <Heading sx={{
+                                textOverflow: 'ellipsis',
+                                overflow: 'hidden',
+                                whiteSpace: 'nowrap'
+                            }}>{item.name}</Heading>
+                        </Box>
+                    </CardRoot>
+                </Grid>
+            ))};
         </Grid>
     )
 }

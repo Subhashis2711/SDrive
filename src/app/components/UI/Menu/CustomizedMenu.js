@@ -8,6 +8,8 @@ import ListItemText from '@mui/material/ListItemText'
 import { Divider, MenuList } from '@mui/material'
 import useDialog from 'app/hooks/useUiComponent'
 import useUiComponent from 'app/hooks/useUiComponent'
+import FileUploadInput from '../Input/FileUploadInput'
+import CustomizedAlertBar from '../AlertBars/CustomizedAlertBar'
 
 const StyledMenu = styled((props) => (
     <Menu
@@ -62,35 +64,58 @@ const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
 }))
 
 const CustomizedMenu = (props) => {
-    const { items, anchorEl, open: menuOpen, handleClose: handleMenuClose, onOpenCreateFolderDialog } = props
-    const ctx = useUiComponent();
+    const {
+        items,
+        anchorEl,
+        open: menuOpen,
+        handleClose: handleMenuClose,
+        onOpenCreateFolderDialog,
+    } = props
+    const ctx = useUiComponent()
     const { showUiComponent, hideUiComponent } = ctx
-    
-    const menuItems = items.map((item) => { 
-        const Dialog = item.dialog || '';
+
+    const menuItems = items.map((item) => {
+        const Dialog = item.dialog || ''
 
         const openDialogHandler = () => {
-            ((Dialog != '') && showUiComponent(Dialog))
+            Dialog != '' && showUiComponent(Dialog)
         }
-        return (
-            [
-                (item.children?.map((child) => {
-                    const MenuIcon = child.icon
 
-                    return (
-                        <StyledMenuItem key={child.id} onClick={openDialogHandler}>
-                            <ListItemIcon>
-                                <MenuIcon />
-                            </ListItemIcon>
-                            <ListItemText primary={child.title} />
-                        </StyledMenuItem>
-                            
-                    )
-                })),
-                <Divider />,
+        const openInputDialog = (event) => {
+            document.getElementById('file-upload-input').click();
+        }
 
-            ]
-        )
+        const onChangeHandler = (event) => {
+            console.log(event);
+        }
+
+        return [
+            item.children?.map((child) => {
+                const MenuIcon = child.icon
+
+                const onClickHandler = item.dialog
+                    ? openDialogHandler
+                    : child.upload
+                    ? openInputDialog
+                    : null;
+
+                return (
+                    <StyledMenuItem key={child.id} onClick={onClickHandler}>
+                        {child.upload === 'file-upload' && (
+                            <>
+                                <FileUploadInput id="file-upload-input" onChange={onClickHandler}/>
+                                
+                            </>
+                        )}
+                        <ListItemIcon>
+                            <MenuIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={child.title} />
+                    </StyledMenuItem>
+                )
+            }),
+            <Divider />,
+        ]
     })
     return (
         <div>

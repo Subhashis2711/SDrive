@@ -4,6 +4,7 @@ import { amber, green } from '@mui/material/colors'
 import { Alert, Button, Snackbar } from '@mui/material'
 import { useDispatch } from 'react-redux'
 import { UiActions } from 'app/store/slices/UiSlice'
+import { H1 } from 'app/components/Typography'
 
 const ContentRoot = styled('div')(({ theme }) => ({
     '& .success': {
@@ -37,13 +38,6 @@ const ContentRoot = styled('div')(({ theme }) => ({
 const CustomizedAlertBar = (props) => {
     const dispatch = useDispatch();
     const { open, vertical, horizontal, variant, severity, message } = props;
-
-    const [state, setState] = React.useState({
-        open: open,
-        vertical: vertical,
-        horizontal: horizontal,
-    });
-    
 
     const handleClose = () => {
         dispatch(UiActions.HideToast());
